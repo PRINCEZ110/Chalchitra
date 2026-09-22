@@ -56,8 +56,19 @@
         document.body.style.overflow = '';
         hideLoader(false);
         revealContent(false);
+        initDynamicSections();
       }});
     gsap.set('[data-reveal-hero]', {opacity:0});
+  }
+
+  if (seen) { setTimeout(initDynamicSections, 50); }
+
+  function initDynamicSections(){
+    renderFilms();
+    renderTimeline();
+    renderPeople();
+    renderMemoriam();
+    initScrollReveals();
   }
 
   /* Lenis smooth scroll */
@@ -161,34 +172,180 @@
     } else if (overlay.classList.contains('open')) closeMenu();
   }); });
 
+  /* ========== Dynamic Data Sections ========== */
+
+  function renderFilms(){
+    if (typeof CHALCHITRA === 'undefined' || !CHALCHITRA.films) return;
+    var listEl = document.getElementById('film-list');
+    var navEl = document.getElementById('decade-nav');
+    if (!listEl) return;
+    var films = CHALCHITRA.films;
+
+    var decades = {};
+    films.forEach(function(f){
+      var decade = Math.floor(f.year / 10) * 10 + 's';
+      if (!decades[decade]) decades[decade] = [];
+      decades[decade].push(f);
+    });
+
+    if (navEl) {
+      var allBtn = document.createElement('button');
+      allBtn.className = 'decade-btn active';
+      allBtn.textContent = 'All (' + films.length + ')';
+      allBtn.addEventListener('click', function(){ filterDecade(null); });
+      navEl.appendChild(allBtn);
+
+      Object.keys(decades).sort().forEach(function(d){
+        var btn = document.createElement('button');
+        btn.className = 'decade-btn';
+        btn.textContent = d + ' (' + decades[d].length + ')';
+        btn.addEventListener('click', function(){ filterDecade(d); });
+        navEl.appendChild(btn);
+      });
+    }
+
+    function filterDecade(decade){
+      navEl.querySelectorAll('.decade-btn').forEach(function(b, i){
+        var matches = decade ? b.textContent.indexOf(decade) === 0 : i === 0;
+        b.classList.toggle('active', matches);
+      });
+      renderFilmRows(decade ? decades[decade] : films);
+    }
+
+    renderFilmRows(films);
+
+    function renderFilmRows(arr){
+      listEl.innerHTML = '';
+      arr.forEach(function(f, i){
+        var row = document.createElement('article');
+        row.className = 'film-row';
+        row.setAttribute('data-reveal', '');
+        row.setAttribute('data-img', f.img || '');
+        row.innerHTML =
+          '<span class="film-idx">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<div class="film-main">' +
+            '<h3 class="film-title">' + f.title + '</h3>' +
+            '<div class="film-meta-row">' +
+              '<span class="film-director">' + (f.director || '') + '</span>' +
+              '<span class="film-year">' + f.year + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="film-tags"><span>' + (f.genre || '') + '</span><span>' + (f.country || 'Nepal') + '</span></div>' +
+          '<span class="film-arrow">&rarr;</span>';
+        listEl.appendChild(row);
+      });
+    }
+  }
+
+  function renderTimeline(){
+    if (typeof CHALCHITRA === 'undefined' || !CHALCHITRA.events) return;
+    var el = document.getElementById('timeline-list');
+    if (!el) return;
+    CHALCHITRA.events.forEach(function(ev){
+      var item = document.createElement('article');
+      item.className = 'tl-item';
+      item.setAttribute('data-reveal', '');
+      item.innerHTML =
+        '<div class="tl-date">' + ev.year + '</div>' +
+        '<div class="tl-content">' +
+          '<h3 class="tl-title">' + ev.title + '</h3>' +
+          '<p class="tl-desc">' + ev.desc + '</p>' +
+        '</div>';
+      el.appendChild(item);
+    });
+  }
+
+  function renderPeople(){
+    if (typeof CHALCHITRA === 'undefined' || !CHALCHITRA.people) return;
+    var listEl = document.getElementById('people-list');
+    var filterEl = document.getElementById('role-filter');
+    var countEl = document.getElementById('people-count');
+    if (!listEl) return;
+    var people = CHALCHITRA.people;
+
+    function renderList(filtered){
+      listEl.innerHTML = '';
+      filtered.forEach(function(p, i){
+        var row = document.createElement('div');
+        row.className = 'person-row';
+        row.setAttribute('data-reveal', '');
+        row.innerHTML =
+          '<span class="p-idx">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<span class="p-name">' + p.name + '</span>' +
+          '<span class="p-role">' + p.role + '</span>' +
+          (p.years ? '<span class="p-years">' + p.years + '</span>' : '');
+        listEl.appendChild(row);
+      });
+      if (countEl) countEl.textContent = filtered.length + ' people';
+    }
+
+    if (filterEl) {
+      filterEl.addEventListener('change', function(){
+        var role = filterEl.value;
+        renderList(role ? people.filter(function(p){ return p.role === role; }) : people);
+        initScrollReveals();
+      });
+    }
+
+    renderList(people);
+  }
+
+  function renderMemoriam(){
+    if (typeof CHALCHITRA === 'undefined' || !CHALCHITRA.memoriam) return;
+    var el = document.getElementById('memoriam-list');
+    if (!el) return;
+    CHALCHITRA.memoriam.forEach(function(p){
+      var item = document.createElement('article');
+      item.className = 'mem-item';
+      item.setAttribute('data-reveal', '');
+      item.innerHTML =
+        '<h3 class="mem-name">' + p.name + '</h3>' +
+        '<p class="mem-role">' + p.role + ' · ' + p.life + '</p>' +
+        '<p class="mem-desc">' + p.desc + '</p>';
+      el.appendChild(item);
+    });
+  }
+
   /* Scroll reveals */
-  if (!reduced && window.gsap && window.ScrollTrigger) {
+  function initScrollReveals(){
+    if (reduced || !window.gsap || !window.ScrollTrigger) return;
     gsap.registerPlugin(ScrollTrigger);
 
     gsap.utils.toArray('[data-reveal]').forEach(function(el){
+      if (el._chRevealDone) return;
+      el._chRevealDone = true;
       gsap.fromTo(el, {opacity:0, y:28}, {opacity:1, y:0, duration:0.9, ease:'power3.out',
         scrollTrigger:{trigger:el, start:'top 88%', once:true}});
     });
 
     /* Image reveals — clip-path inset */
     gsap.utils.toArray('.img-reveal').forEach(function(el){
+      if (el._chImgDone) return;
+      el._chImgDone = true;
       gsap.fromTo(el, {clipPath:'inset(8% 8% 8% 8%)'}, {clipPath:'inset(0% 0% 0% 0%)', duration:1.2, ease:'power3.out',
         scrollTrigger:{trigger:el, start:'top 85%', once:true}});
     });
 
     /* Parallax on hero image */
     var heroImg = document.querySelector('.hero-media img');
-    if (heroImg) gsap.fromTo(heroImg, {scale:1.08, yPercent:-3}, {scale:1.08, yPercent:3, ease:'none',
-      scrollTrigger:{trigger:'.hero-media', start:'top bottom', end:'bottom top', scrub:true}});
+    if (heroImg && !heroImg._chParallaxDone) {
+      heroImg._chParallaxDone = true;
+      gsap.fromTo(heroImg, {scale:1.08, yPercent:-3}, {scale:1.08, yPercent:3, ease:'none',
+        scrollTrigger:{trigger:'.hero-media', start:'top bottom', end:'bottom top', scrub:true}});
+    }
 
     /* Parallax on about image */
     var aboutImg = document.querySelector('.about-image img');
-    if (aboutImg) gsap.fromTo(aboutImg, {scale:1.08, yPercent:-3}, {scale:1.08, yPercent:3, ease:'none',
-      scrollTrigger:{trigger:'.about-image', start:'top bottom', end:'bottom top', scrub:true}});
+    if (aboutImg && !aboutImg._chParallaxDone) {
+      aboutImg._chParallaxDone = true;
+      gsap.fromTo(aboutImg, {scale:1.08, yPercent:-3}, {scale:1.08, yPercent:3, ease:'none',
+        scrollTrigger:{trigger:'.about-image', start:'top bottom', end:'bottom top', scrub:true}});
+    }
 
     /* Dark scene — pinned film frame */
     var sceneFrame = document.querySelector('.scene-frame');
-    if (sceneFrame) {
+    if (sceneFrame && !sceneFrame._chSceneDone) {
+      sceneFrame._chSceneDone = true;
       gsap.fromTo(sceneFrame, {scale:0.72, clipPath:'inset(10% 10% 10% 10%)'}, {scale:1, clipPath:'inset(0% 0% 0% 0%)', ease:'none',
         scrollTrigger:{trigger:'.scene', start:'top top', end:'bottom bottom', scrub:1}});
       gsap.utils.toArray('[data-scene-fade]').forEach(function(el){
@@ -204,8 +361,11 @@
 
     /* Footer wordmark reveal */
     var footWord = document.querySelector('.foot-word span');
-    if (footWord) gsap.fromTo(footWord, {yPercent:100}, {yPercent:0, duration:1.1, ease:'power3.out',
-      scrollTrigger:{trigger:'.foot-word', start:'top 94%', once:true}});
+    if (footWord && !footWord._chWordDone) {
+      footWord._chWordDone = true;
+      gsap.fromTo(footWord, {yPercent:100}, {yPercent:0, duration:1.1, ease:'power3.out',
+        scrollTrigger:{trigger:'.foot-word', start:'top 94%', once:true}});
+    }
   }
 
   /* Custom cursor — fine pointers only, no mobile, no reduced motion */
@@ -266,40 +426,6 @@
     }
   }
 
-  /* Archive filters */
-  (function(){
-    var yearSel = document.getElementById('f-year');
-    var dirSel = document.getElementById('f-dir');
-    var countEl = document.getElementById('f-count');
-    if (!yearSel || !dirSel) return;
-    var rows = Array.prototype.slice.call(document.querySelectorAll('.a-row'));
-    var seen = {};
-    rows.forEach(function(r){
-      var d = r.querySelector('.a-d');
-      var name = d ? d.textContent.trim() : '';
-      if (name && !seen[name]) {
-        seen[name] = 1;
-        var o = document.createElement('option');
-        o.textContent = name;
-        dirSel.appendChild(o);
-      }
-    });
-    function apply(){
-      var y = yearSel.value, d = dirSel.value, n = 0;
-      rows.forEach(function(r){
-        var ry = r.querySelector('.a-y').textContent.trim();
-        var rd = r.querySelector('.a-d').textContent.trim();
-        var ok = (!y || ry === y) && (!d || rd === d);
-        r.style.display = ok ? '' : 'none';
-        if (ok) n++;
-      });
-      if (countEl) countEl.textContent = n + (n === 1 ? ' title' : ' titles');
-    }
-    yearSel.addEventListener('change', apply);
-    dirSel.addEventListener('change', apply);
-    apply();
-  })();
-
   /* Newsletter */
   var form = document.getElementById('news-form');
   var news = document.getElementById('news');
@@ -322,7 +448,7 @@
         try { v.muted = true; } catch(e){}
         try {
           var p = v.play();
-          if (p && p.catch) p.catch(function(){ /* autoplay blocked — retry on first gesture */ });
+          if (p && p.catch) p.catch(function(){});
         } catch(e){}
       };
       var kick = function(){

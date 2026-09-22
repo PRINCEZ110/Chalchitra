@@ -315,6 +315,63 @@ footer{border-top:1px solid var(--line);padding:72px var(--page) 28px;overflow:h
 /* ---------- table note ---------- */
 .table-note{margin-top:32px;font-size:12px;color:var(--grey);letter-spacing:.01em}
 
+/* ---------- decade navigation ---------- */
+.decade-nav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 32px}
+.decade-btn{
+  padding:8px 16px;border:1px solid var(--line);border-radius:100px;
+  font:inherit;font-size:12px;color:var(--grey);letter-spacing:.04em;
+  background:transparent;cursor:pointer;transition:all .3s ease;min-height:44px;
+}
+.decade-btn:hover{border-color:var(--black);color:var(--black)}
+.decade-btn.active{background:var(--black);color:#fff;border-color:var(--black)}
+
+/* ---------- timeline ---------- */
+.timeline-list{display:flex;flex-direction:column}
+.tl-item{
+  display:grid;grid-template-columns:80px 1fr;gap:32px;align-items:start;
+  padding:28px 0;border-bottom:1px solid var(--line-soft);position:relative;
+}
+.tl-item:first-child{border-top:1px solid var(--line)}
+.tl-date{
+  color:var(--grey);font-variant-numeric:tabular-nums;font-size:14px;
+  letter-spacing:.02em;padding-top:2px;
+}
+.tl-title{
+  font-weight:400;font-size:clamp(18px,2.2vw,28px);letter-spacing:-.01em;
+  color:var(--black);line-height:1.2;margin:0 0 8px;
+}
+.tl-desc{
+  font-size:clamp(14px,1.1vw,16px);color:var(--grey);line-height:1.7;
+  margin:0;max-width:56ch;
+}
+
+/* ---------- people list (updated) ---------- */
+.people-filter{display:flex;gap:28px;align-items:center;flex-wrap:wrap;margin:0 0 24px}
+.people-filter label{font-size:11px;color:var(--grey);display:flex;gap:10px;align-items:center;letter-spacing:.04em;text-transform:uppercase}
+.people-filter select{font:inherit;font-size:13px;color:var(--black);background:transparent;
+  border:0;border-bottom:1px solid var(--grey);padding:8px 2px;min-height:44px;max-width:220px;cursor:pointer}
+.people-filter select option{color:#111;background:#fff}
+.p-years{font-size:12px;color:var(--grey-light);margin-left:auto}
+
+/* ---------- memoriam ---------- */
+.memoriam-list{display:flex;flex-direction:column;gap:0}
+.mem-item{
+  padding:48px 0;border-bottom:1px solid rgba(255,255,255,.12);
+}
+.mem-item:first-child{border-top:1px solid rgba(255,255,255,.12)}
+.mem-name{
+  font-weight:400;font-size:clamp(28px,4vw,56px);line-height:1.05;
+  letter-spacing:-.02em;color:#fff;margin:0 0 12px;
+}
+.mem-role{
+  font-size:13px;color:var(--grey-light);letter-spacing:.04em;text-transform:uppercase;
+  margin:0 0 16px;
+}
+.mem-desc{
+  font-size:clamp(14px,1.2vw,18px);color:rgba(255,255,255,.7);line-height:1.7;
+  margin:0;max-width:52ch;
+}
+
 /* ---------- custom cursor ---------- */
 #cursor{position:fixed;top:0;left:0;z-index:3000;pointer-events:none;display:none}
 html.has-cursor #cursor{display:block}
