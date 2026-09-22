@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Chalachitra — Kathmandu-based film production house">
 <meta property="og:description" content="A boutique Nepali film production house. Features and documentaries rooted in culture, landscape and lived experience.">
-<meta property="og:image" content="https://picsum.photos/seed/himal-cinema/1200/630?grayscale">
+<meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Snowy_Annapurna_Range_-_panorama.jpg?width=1200">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Chalachitra — Kathmandu-based film production house">
 <meta name="twitter:description" content="A boutique Nepali film production house. Features and documentaries rooted in culture, landscape and lived experience.">
@@ -27,7 +27,18 @@
   --grey:#888888;
   --line:rgba(255,255,255,.16);
   --line-soft:rgba(255,255,255,.12);
-  --pad-d:40px;
+  --page-padding:40px;
+  --grid-gap:32px;
+  --border:1px solid rgba(255,255,255,.16);
+  --text-primary:#F5F5F5;
+  --text-secondary:#CFCFCF;
+  --text-muted:#888888;
+  --background:#000000;
+  --display-size:clamp(64px,8vw,150px);
+  --headline-size:clamp(40px,5vw,90px);
+  --body-size:clamp(16px,2vw,22px);
+  --meta-size:13px;
+  --label-size:11px;
   --ease:cubic-bezier(.22,1,.36,1);
   --font:"Inter","Neue Haas Grotesk","Univers","Helvetica Neue",Arial,sans-serif;
   --ne:"Mukta","Noto Sans Devanagari",sans-serif;
@@ -42,6 +53,14 @@ body{
   overflow-x:hidden;
 }
 ::selection{background:var(--white);color:var(--black)}
+html{scrollbar-color:#333 #000}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#333;border:2px solid #000}
+::-webkit-scrollbar-thumb:hover{background:#555}
+/* procedural film grain, 0.035 opacity, non-interactive */
+body::after{content:"";position:fixed;inset:0;z-index:500;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 a{color:inherit;text-decoration:none}
 a:hover{text-decoration:none}
 :focus-visible{outline:2px solid var(--white);outline-offset:3px}
@@ -63,17 +82,17 @@ section{scroll-margin-top:90px;position:relative}
 
 /* ---------- header ---------- */
 #site-header{position:fixed;top:0;left:0;right:0;z-index:900;
-  display:flex;align-items:center;justify-content:space-between;gap:24px;
-  padding:24px var(--pad-d);transition:background .4s ease,border-color .4s ease,padding .4s ease;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;
+  padding:22px var(--page-padding);transition:background .4s ease,border-color .4s ease,padding .4s ease;
   border-bottom:1px solid transparent}
-#site-header.scrolled{background:rgba(0,0,0,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom-color:var(--line-soft)}
+#site-header.scrolled{background:rgba(0,0,0,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom-color:var(--line-soft);padding-top:14px;padding-bottom:14px}
+.nav-center{font-size:14px;font-weight:400;white-space:nowrap}
+.nav-center a{position:relative;padding:2px 0}
+.nav-center a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--white);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.nav-center a:hover::after,.nav-center a:focus-visible::after{transform:scaleX(1)}
+.nav-center .sep{color:var(--grey);margin:0 8px}
 .wordmark{font-size:18px;font-weight:400;color:var(--white);letter-spacing:-.01em;white-space:nowrap}
 .nav-right{display:flex;align-items:center;gap:20px;font-size:14px;font-weight:400;flex-wrap:wrap;justify-content:flex-end}
-.nav-inline{color:var(--off);white-space:nowrap}
-.nav-inline a{position:relative;padding:2px 0}
-.nav-inline a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--white);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
-.nav-inline a:hover::after,.nav-inline a:focus-visible::after{transform:scaleX(1)}
-.nav-inline .sep{color:var(--grey);margin:0 6px}
 .loc-tag{color:var(--grey);font-size:13px;font-weight:300;white-space:nowrap}
 #clock{color:var(--grey);font-weight:300;font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums;min-width:190px;text-align:right}
 .contact-link{font-weight:400}
@@ -85,7 +104,7 @@ section{scroll-margin-top:90px;position:relative}
 #menu-overlay{position:fixed;inset:0;background:var(--black);z-index:950;
   transform:translateY(-100%);visibility:hidden;
   display:flex;flex-direction:column;justify-content:space-between;
-  padding:24px var(--pad-d) 32px}
+  padding:24px var(--page-padding) 32px}
 #menu-overlay.open{visibility:visible}
 .menu-top{display:flex;justify-content:space-between;align-items:center}
 .menu-top .loc{color:var(--grey);font-size:13px}
@@ -102,7 +121,7 @@ section{scroll-margin-top:90px;position:relative}
 .menu-foot .cta:hover{border-color:var(--white)}
 
 /* ---------- hero ---------- */
-#home{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:150px var(--pad-d) 48px}
+#home{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:150px var(--page-padding) 48px}
 .kicker{color:var(--grey);font-size:14px;line-height:1.8}
 .kicker + .kicker{margin-top:2px}
 .hero-statement{margin:34px 0 0;font-weight:400;font-size:clamp(48px,8vw,130px);line-height:1.08;letter-spacing:-.025em;color:var(--white)}
@@ -118,7 +137,7 @@ section{scroll-margin-top:90px;position:relative}
 @keyframes drop{0%{top:-100%}55%{top:0}100%{top:100%}}
 
 /* ---------- generic section ---------- */
-.block{padding:120px var(--pad-d);border-top:1px solid var(--line-soft);overflow:hidden}
+.block{padding:120px var(--page-padding);border-top:1px solid var(--line-soft);overflow:hidden}
 .watermark{position:absolute;top:24px;right:8px;font-weight:700;font-size:clamp(200px,30vw,460px);line-height:.8;color:rgba(255,255,255,.04);pointer-events:none;user-select:none;font-variant-numeric:tabular-nums}
 .shead{display:flex;gap:32px;align-items:flex-start;margin-bottom:64px}
 .snum{font-weight:700;font-size:clamp(80px,12vw,170px);line-height:.9;color:var(--white);letter-spacing:-.04em;font-variant-numeric:tabular-nums;min-width:1.4em}
@@ -131,6 +150,10 @@ section{scroll-margin-top:90px;position:relative}
 .lede{max-width:62ch}
 
 /* ---------- intro ---------- */
+.studio-statement{font-weight:400;font-size:clamp(40px,6vw,96px);line-height:.98;letter-spacing:-.03em;
+  color:var(--white);margin-bottom:80px;max-width:14em}
+.studio-statement .line{display:block;overflow:hidden}
+.studio-statement .line > span{display:block}
 .intro-grid{display:grid;grid-template-columns:55% 45%;gap:64px;align-items:start}
 .intro-grid .body p + p{margin-top:1.4em}
 .meta-grey{color:var(--grey)}
@@ -164,6 +187,19 @@ section{scroll-margin-top:90px;position:relative}
 .view-link .arr{transition:transform .5s var(--ease);display:inline-block}
 .view-link:hover .arr{transform:translateX(6px)}
 
+/* ---------- film index ---------- */
+.findex{margin-top:72px}
+.findex-label{color:var(--grey);font-size:var(--meta-size);margin-bottom:8px}
+.frow{display:grid;grid-template-columns:90px 1.2fr 1fr 110px;gap:24px;align-items:baseline;
+  padding:20px 0;border-bottom:1px solid var(--line-soft);font-size:15px;position:relative}
+.frow:first-of-type{border-top:var(--border)}
+.frow .y{color:var(--grey);font-variant-numeric:tabular-nums}
+.frow .t{font-weight:400;font-size:clamp(18px,2.2vw,28px);letter-spacing:-.01em;color:var(--white);transition:transform .5s var(--ease)}
+.frow .d{color:var(--off)}
+.frow .f{color:var(--grey);font-size:13px}
+.frow:hover{background:rgba(255,255,255,.04)}
+.frow:hover .t{transform:translateX(8px)}
+.findex-note{margin-top:20px;font-size:12px;color:var(--grey)}
 /* ---------- team ---------- */
 .team-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 64px}
 .person{display:flex;align-items:baseline;gap:16px;padding:18px 0;border-top:1px solid var(--line-soft)}
@@ -200,15 +236,27 @@ section{scroll-margin-top:90px;position:relative}
 .trow .m{color:var(--off)}
 .trow .a{color:var(--grey)}
 .trow a.rowlink{position:absolute;inset:0}
+.trow:has(a.rowlink){cursor:pointer}
 .trow:hover .f{text-decoration:underline;text-underline-offset:4px}
+#press .trow:has(a.rowlink) .a::after{content:"\2192";display:inline-block;margin-left:10px;opacity:.35;
+  transition:transform .45s var(--ease),opacity .45s var(--ease)}
+#press .trow:has(a.rowlink):hover .a::after{transform:rotate(-45deg);opacity:1}
 .table-note{margin-top:28px;font-size:12px;color:var(--grey)}
 
 /* ---------- cta ---------- */
-#contact{text-align:center;padding:150px var(--pad-d)}
+#contact{text-align:center;padding:150px var(--page-padding)}
 #contact h2{font-weight:400;font-size:clamp(40px,6vw,84px);line-height:1.08;letter-spacing:-.02em;color:var(--white)}
+.contact-statement{font-size:clamp(56px,9vw,150px)!important;line-height:.95!important;letter-spacing:-.03em!important}
+.contact-statement .line{display:block;overflow:hidden}
+.contact-statement .line > span{display:block}
+.c-rows{max-width:780px;margin:64px auto 0;text-align:left;border-top:var(--border)}
+.c-row{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:22px 0;
+  border-bottom:1px solid var(--line-soft);font-size:clamp(18px,2.4vw,26px)}
+.c-row .k{color:var(--grey);font-size:14px;flex-shrink:0}
+.c-row a{position:relative}
+.c-row a:hover{text-decoration:underline;text-underline-offset:6px}
+.c-row .sep{color:var(--grey)}
 #contact .ne{font-family:var(--ne);color:var(--grey);margin-top:12px;font-size:clamp(16px,2vw,22px)}
-.btn-ghost{display:inline-block;margin-top:38px;border:1px solid var(--white);background:transparent;color:var(--white);padding:16px 46px;font-size:15px;font-weight:400;transition:background .3s ease,color .3s ease;cursor:pointer}
-.btn-ghost:hover{background:var(--white);color:var(--black)}
 .news{max-width:560px;margin:72px auto 0;text-align:left}
 .news label{display:block;font-size:14px;color:var(--grey);margin-bottom:12px}
 .news form{display:flex;gap:14px;align-items:center;border-bottom:1px solid var(--grey);padding-bottom:10px}
@@ -222,18 +270,42 @@ section{scroll-margin-top:90px;position:relative}
 .news.invalid .err{display:block}
 
 /* ---------- footer ---------- */
-footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
+footer{border-top:1px solid var(--line);padding:72px var(--page-padding) 28px}
 .fgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:32px}
 .fblock{display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.7}
 .fblock .k{color:var(--grey);font-weight:400;min-width:1em}
 .fblock a{border-bottom:1px solid transparent}
 .fblock a:hover{border-color:var(--white)}
 .fblock .stack{display:flex;flex-direction:column;gap:4px}
-.fbottom{margin-top:64px;padding-top:20px;border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--grey);font-size:13px}
+.credits{margin-top:56px;border-top:1px solid var(--line-soft);padding-top:16px;font-size:12px;color:var(--grey);line-height:2}
+.credits summary{cursor:pointer;list-style:none;min-height:44px;display:inline-block}
+.credits summary::-webkit-details-marker{display:none}
+.credits summary:hover{color:var(--white)}
+.credits a{border-bottom:1px solid transparent}
+.credits a:hover{color:var(--white);border-color:var(--white)}
+.fbottom{margin-top:40px;padding-top:20px;border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--grey);font-size:13px}
 .fbottom nav{display:flex;gap:18px;flex-wrap:wrap}
 #to-top{background:none;border:0;color:var(--off);font:inherit;font-size:13px;cursor:pointer;padding:8px 0;border-bottom:1px solid var(--grey)}
 #to-top:hover{border-color:var(--white)}
 
+/* ---------- custom cursor + floating previews (fine pointers only) ---------- */
+#cursor{position:fixed;top:0;left:0;z-index:3000;pointer-events:none;display:none}
+html.has-cursor #cursor{display:block}
+html.has-cursor,html.has-cursor a,html.has-cursor button,html.has-cursor input{cursor:none}
+#cursor .dot{display:flex;align-items:center;justify-content:center;
+  width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%!important;
+  background:#fff;color:#000;mix-blend-mode:difference;
+  font-size:10px;font-weight:400;letter-spacing:.04em;white-space:nowrap;
+  transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease)}
+#cursor.big .dot{width:78px;height:78px;margin:-39px 0 0 -39px}
+#cursor .lbl{display:none;padding:0 8px}
+#cursor.big .lbl{display:block}
+#film-preview,#team-preview{position:fixed;top:0;left:0;z-index:1200;pointer-events:none;
+  width:min(300px,26vw);aspect-ratio:4/3;overflow:hidden;background:#0a0a0a;
+  opacity:0;transform:scale(.96)}
+#film-preview img,#team-preview img{width:100%;height:100%;object-fit:cover}
+#team-preview.peek{left:50%;top:auto;bottom:24px;transform:translateX(-50%)!important;
+  opacity:1!important;visibility:visible!important;width:min(300px,70vw)}
 /* ---------- reveal defaults (JS enhances) ---------- */
 [data-reveal]{will-change:transform,opacity}
 
@@ -248,16 +320,19 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
   .fgrid{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:768px){
-  :root{--pad-d:20px}
+  :root{--page-padding:20px}
   #site-header{padding:16px 20px}
   #clock{display:none}
-  .nav-inline,.loc-tag{display:none}
+  .nav-center,.loc-tag{display:none}
+  #site-header{grid-template-columns:1fr auto}
   .block{padding:84px 20px}
   #home{padding:120px 20px 36px}
   .shead{gap:18px;margin-bottom:40px}
   .vlabel{flex-direction:row;gap:8px;padding-top:8px;font-size:13px}
   .thead{display:none}
   .trow{grid-template-columns:1fr;gap:6px;padding:20px 0}
+  .frow{grid-template-columns:1fr;gap:6px;padding:18px 0}
+  #film-preview,#team-preview{display:none}
   .pillar{grid-template-columns:1fr;gap:10px}
   .team-grid{grid-template-columns:1fr;gap:0}
   .person .role{font-size:13px}
@@ -274,6 +349,9 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
 </head>
 <body>
 
+<div id="cursor" aria-hidden="true"><span class="dot"><span class="lbl" id="cursor-label"></span></span></div>
+<div id="film-preview" aria-hidden="true"><img width="600" height="450" alt=""></div>
+<div id="team-preview" aria-hidden="true"><img width="600" height="450" alt=""></div>
 <div id="loader" role="status" aria-label="Loading">
   <div class="brand">Chalachitra</div>
   <div class="tag">Film production studio<br>Features &amp; documentaries</div>
@@ -285,10 +363,10 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
 
 <header id="site-header">
   <a class="wordmark" href="#home" aria-label="Chalachitra home">Chalachitra</a>
+  <nav class="nav-center" aria-label="Primary">
+    <a href="#films">Films</a><span class="sep">,</span><a href="#team">Team</a><span class="sep">,</span><a href="#awards">Awards</a><span class="sep">,</span><a href="#press">Press</a>
+  </nav>
   <div class="nav-right">
-    <nav class="nav-inline" aria-label="Primary">
-      <a href="#films">Films</a><span class="sep">,</span><a href="#team">Team</a><span class="sep">,</span><a href="#awards">Awards</a><span class="sep">,</span><a href="#press">Press</a>
-    </nav>
     <span class="loc-tag">: Kathmandu, NP</span>
     <span id="clock" aria-label="Current time in Kathmandu">--:-- Kathmandu, NP</span>
     <a class="contact-link" href="#contact">Contact</a>
@@ -332,8 +410,8 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     </h1>
     <div class="hero-media" data-reveal-hero>
       <figure>
-        <img src="https://picsum.photos/seed/himal-cinema/2400/1004?grayscale" width="2400" height="1004" alt="Black and white panoramic still of a Himalayan valley used as a film backdrop" fetchpriority="high">
-        <figcaption><span>Field still — Mustang, Nepal</span><span>2.39 : 1</span></figcaption>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Snowy_Annapurna_Range_-_panorama.jpg?width=2400" width="2400" height="917" alt="Panoramic view of the snow-covered Annapurna range, Nepal" fetchpriority="high">
+        <figcaption><span>Annapurna range — location country</span><span>Photograph: Ali Sabbagh, CC0</span></figcaption>
       </figure>
     </div>
     <div class="scroll-cue" data-reveal-hero><span class="track" aria-hidden="true"></span><span>[Scroll down]</span></div>
@@ -342,6 +420,12 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
   <!-- intro -->
   <section class="block" id="about" aria-labelledby="about-h">
     <div class="watermark" aria-hidden="true">0</div>
+    <p class="studio-statement" data-reveal>
+      <span class="line"><span>We make films</span></span>
+      <span class="line"><span>that pay attention</span></span>
+      <span class="line"><span>to place, people,</span></span>
+      <span class="line"><span>memory and time.</span></span>
+    </p>
     <div class="intro-grid">
       <div class="lede" data-reveal>
         <h2 id="about-h" style="font-weight:400;font-size:clamp(28px,3.6vw,48px);line-height:1.15;letter-spacing:-.02em;color:var(--white)">A boutique studio for Nepali stories.</h2>
@@ -353,7 +437,7 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
         </div>
       </div>
       <figure class="portrait" data-reveal>
-        <div class="ph"><img id="intro-img" src="https://picsum.photos/seed/kathmandu-portrait/900/1200?grayscale" width="900" height="1200" alt="Tall black and white portrait of a film set doorway in Kathmandu" loading="lazy"></div>
+        <div class="ph"><img id="intro-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni_Mustang-WLV-0775.jpg?width=900" width="900" height="1350" alt="Narrow stone-walled alley in Kagbeni village, Mustang, Nepal" loading="lazy"></div>
         <blockquote>Each film reflects the vision of our storytellers, turning ideas into moving pictures with meaning.</blockquote>
       </figure>
     </div>
@@ -373,7 +457,7 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     </div>
 
     <article class="film film-row" data-reveal>
-      <div class="film-media"><a href="#films" aria-label="View Kagbeni"><img src="https://picsum.photos/seed/kagbeni-still/1400/875?grayscale" width="1400" height="875" alt="Black and white film still of a windswept Mustang village" loading="lazy"></a></div>
+      <div class="film-media"><a href="#films" aria-label="View Kagbeni"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni_Mustang-WLV-0741.jpg?width=1400" width="1400" height="933" alt="Kagbeni village beneath Nilgiri North, Mustang, Nepal" loading="lazy"></a></div>
       <div class="film-info">
         <h3>Kagbeni</h3><p class="year">2008 — Drama / Thriller</p>
         <dl><dt>Director</dt><dd>Bhusan Dahal</dd><dt>Country</dt><dd>Nepal</dd><dt>Language</dt><dd>Nepali</dd><dt>Runtime</dt><dd>Information not publicly verified</dd></dl>
@@ -384,7 +468,7 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     </article>
 
     <article class="film film-row flip" data-reveal>
-      <div class="film-media"><a href="#films" aria-label="View Loot"><img src="https://picsum.photos/seed/loot-kathmandu/1400/875?grayscale" width="1400" height="875" alt="Black and white still of Kathmandu streets at night" loading="lazy"></a></div>
+      <div class="film-media"><a href="#films" aria-label="View Loot"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Al_Madina_(Halal_Foods_Restaurant)Thamel,Kathmandu,Nepal.jpg?width=1400" width="1400" height="1050" alt="Thamel street at night, Kathmandu, Nepal" loading="lazy"></a></div>
       <div class="film-info">
         <h3>Loot</h3><p class="year">2012 — Crime / Drama</p>
         <dl><dt>Director</dt><dd>Nischal Basnet</dd><dt>Country</dt><dd>Nepal</dd><dt>Language</dt><dd>Nepali</dd><dt>Runtime</dt><dd>Information not publicly verified</dd></dl>
@@ -395,7 +479,7 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     </article>
 
     <article class="film film-row full" data-reveal>
-      <div class="film-media"><a href="#films" aria-label="View White Sun"><img src="https://picsum.photos/seed/white-sun/2400/1004?grayscale" width="2400" height="1004" alt="Wide black and white still of hills and a village trail" loading="lazy"></a></div>
+      <div class="film-media"><a href="#films" aria-label="View White Sun"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni,_Paddies_2,_Mustang,_Nepal.jpg?width=2400" width="2400" height="1600" alt="Terraced paddies at Kagbeni, Mustang, Nepal" loading="lazy"></a></div>
       <div class="film-info">
         <h3>White sun</h3><p class="year">2016 — Drama</p>
         <dl><dt>Director</dt><dd>Deepak Rauniyar</dd><dt>Country</dt><dd>Nepal</dd><dt>Language</dt><dd>Nepali</dd><dt>Runtime</dt><dd>Information not publicly verified</dd></dl>
@@ -404,6 +488,19 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
         <a class="view-link" href="#contact">View film <span class="arr">→</span></a>
       </div>
     </article>
+
+    <div class="findex" data-reveal>
+      <p class="findex-label">Index — features</p>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Panorama_from_poonhill-2019-BJ.jpg?width=600"><span class="y">2024</span><span class="t">Shambhala</span><span class="d">Min Bahadur Bham</span><span class="f">Feature</span></div>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Thamel,_Kathmandu_07.jpg?width=600"><span class="y">2024</span><span class="t">Pooja, sir</span><span class="d">Deepak Rauniyar</span><span class="f">Feature</span></div>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Boudha_Stupa_2018_04.jpg?width=600"><span class="y">2019</span><span class="t">Bulbul</span><span class="d">Binod Paudel</span><span class="f">Feature</span></div>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni,_Paddies_2,_Mustang,_Nepal.jpg?width=600"><span class="y">2016</span><span class="t">White sun</span><span class="d">Deepak Rauniyar</span><span class="f">Feature</span></div>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni_Mustang-WLV-0756.jpg?width=600"><span class="y">2015</span><span class="t">Kalo pothi</span><span class="d">Min Bahadur Bham</span><span class="f">Feature</span></div>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Al_Madina_(Halal_Foods_Restaurant)Thamel,Kathmandu,Nepal.jpg?width=600"><span class="y">2012</span><span class="t">Loot</span><span class="d">Nischal Basnet</span><span class="f">Feature</span></div>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Annapurna_Conservation_Area_Mustang.jpg?width=600"><span class="y">2012</span><span class="t">Highway</span><span class="d">Deepak Rauniyar</span><span class="f">Feature</span></div>
+      <div class="frow" data-img="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni_Mustang-WLV-0741.jpg?width=600"><span class="y">2008</span><span class="t">Kagbeni</span><span class="d">Bhusan Dahal</span><span class="f">Feature</span></div>
+      <p class="findex-note">Reference titles from Nepali cinema history. Preview stills are location photographs, not film frames. Runtimes and full credits: details coming soon.</p>
+    </div>
   </section>
 
   <!-- 01 team -->
@@ -435,7 +532,7 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
       <div class="person" data-reveal><span class="pidx">14</span><p class="name">Bibek Lama</p><p class="role">[VFX artist]</p></div>
       <div class="person" data-reveal><span class="pidx">15</span><p class="name">You, perhaps</p><p class="role">[Collaborator]</p></div>
     </div>
-    <p class="team-note" data-reveal>Representative ensemble of collaborators across our works. Full credits per film on request.</p>
+    <p class="team-note" data-reveal>Illustrative ensemble. Named portraits are public-record photographs shown for identification only and do not imply studio employment. Other preview stills are location photographs. Full credits per film on request.</p>
   </section>
 
   <!-- 02 values -->
@@ -466,9 +563,9 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
       </div>
     </div>
     <div class="pillars">
-      <div class="pillar" data-reveal><span class="pnum">3.1</span><div><h3>Story integrity</h3><p>Scripts rooted in Nepali context, culture, and lived truth. One film, one singular cinematic vision — never diluted.</p></div><figure><img src="https://picsum.photos/seed/script-desk/800/600?grayscale" width="800" height="600" alt="Black and white still of a script and reading glasses on a desk" loading="lazy"><figcaption>Development — script room, Kathmandu</figcaption></figure></div>
-      <div class="pillar" data-reveal><span class="pnum">3.2</span><div><h3>Innovation</h3><p>Technology as a tool, the human touch driving creativity. We invest in research, workshops, and the festival circuit.</p></div><figure><img src="https://picsum.photos/seed/camera-set/800/600?grayscale" width="800" height="600" alt="Black and white still of a cinema camera on location" loading="lazy"><figcaption>Craft — on location, Mustang</figcaption></figure></div>
-      <div class="pillar" data-reveal><span class="pnum">3.3</span><div><h3>Enhanced experience</h3><p>The emotional resonance and wellbeing of the audience come first. Cinema that enriches lives, long after the lights come up.</p></div><figure><img src="https://picsum.photos/seed/cinema-light/800/600?grayscale" width="800" height="600" alt="Black and white still of projector light in a dark cinema hall" loading="lazy"><figcaption>Exhibition — screening room, Patan</figcaption></figure></div>
+      <div class="pillar" data-reveal><span class="pnum">3.1</span><div><h3>Story integrity</h3><p>Scripts rooted in Nepali context, culture, and lived truth. One film, one singular cinematic vision — never diluted.</p></div><figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni_Mustang-WLV-0745.jpg?width=800" width="800" height="533" alt="Interior of Kag chode monastery, Kagbeni, Mustang" loading="lazy"><figcaption>Research — Kag chode monastery, Kagbeni</figcaption></figure></div>
+      <div class="pillar" data-reveal><span class="pnum">3.2</span><div><h3>Innovation</h3><p>Technology as a tool, the human touch driving creativity. We invest in research, workshops, and the festival circuit.</p></div><figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kagbeni_Mustang-WLV-0756.jpg?width=800" width="800" height="534" alt="Stone houses above the Jhong Khola valley, Kagbeni" loading="lazy"><figcaption>Craft — on location, Mustang</figcaption></figure></div>
+      <div class="pillar" data-reveal><span class="pnum">3.3</span><div><h3>Enhanced experience</h3><p>The emotional resonance and wellbeing of the audience come first. Cinema that enriches lives, long after the lights come up.</p></div><figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/1930's_35mm_film_projector..jpg?width=683" width="683" height="1024" alt="Early 35mm professional film projector, museum collection" loading="lazy"><figcaption>Exhibition — 35mm projector study</figcaption></figure></div>
     </div>
   </section>
 
@@ -486,16 +583,16 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     </div>
     <div class="thead" aria-hidden="true"><span>Year</span><span>Film</span><span>Festival / Award</span><span>Accolade</span></div>
     <h3 class="year-group" data-reveal>2024</h3>
-    <div class="trow" data-reveal><span class="y">2024</span><span class="f">Shambhala</span><span class="m">Berlin international film festival — Competition</span><span class="a">Official selection</span></div>
-    <div class="trow" data-reveal><span class="y">2024</span><span class="f">Pooja, sir</span><span class="m">Venice film festival — Orizzonti</span><span class="a">Best actress winner</span></div>
+    <div class="trow" data-reveal><span class="y">2024</span><span class="f">Shambhala</span><span class="m">Berlin international film festival — Competition</span><span class="a">Official selection</span><a class="rowlink" href="https://www.berlinale.de" target="_blank" rel="noopener" aria-label="Shambhala at the Berlin international film festival"></a></div>
+    <div class="trow" data-reveal><span class="y">2024</span><span class="f">Pooja, sir</span><span class="m">Venice film festival — Orizzonti</span><span class="a">Best actress winner</span><a class="rowlink" href="https://www.labiennale.org/en/cinema" target="_blank" rel="noopener" aria-label="Pooja, sir at the Venice film festival"></a></div>
     <h3 class="year-group" data-reveal>2019</h3>
-    <div class="trow" data-reveal><span class="y">2019</span><span class="f">Bulbul</span><span class="m">Academy awards</span><span class="a">Nepal's official submission</span></div>
+    <div class="trow" data-reveal><span class="y">2019</span><span class="f">Bulbul</span><span class="m">Academy awards</span><span class="a">Nepal's official submission</span><a class="rowlink" href="https://www.oscars.org" target="_blank" rel="noopener" aria-label="Bulbul at the Academy awards"></a></div>
     <h3 class="year-group" data-reveal>2016</h3>
-    <div class="trow" data-reveal><span class="y">2016</span><span class="f">White sun</span><span class="m">Venice film festival</span><span class="a">Interfilm award winner</span></div>
+    <div class="trow" data-reveal><span class="y">2016</span><span class="f">White sun</span><span class="m">Venice film festival</span><span class="a">Interfilm award winner</span><a class="rowlink" href="https://www.labiennale.org/en/cinema" target="_blank" rel="noopener" aria-label="White sun at the Venice film festival"></a></div>
     <h3 class="year-group" data-reveal>2015</h3>
-    <div class="trow" data-reveal><span class="y">2015</span><span class="f">Kalo pothi (The black hen)</span><span class="m">Venice critics' week</span><span class="a">Fedeora award winner</span></div>
+    <div class="trow" data-reveal><span class="y">2015</span><span class="f">Kalo pothi (The black hen)</span><span class="m">Venice critics' week</span><span class="a">Fedeora award winner</span><a class="rowlink" href="https://www.labiennale.org/en/cinema" target="_blank" rel="noopener" aria-label="Kalo pothi at Venice critics week"></a></div>
     <h3 class="year-group" data-reveal>2012</h3>
-    <div class="trow" data-reveal><span class="y">2012</span><span class="f">Highway</span><span class="m">Berlin international film festival</span><span class="a">Official selection</span></div>
+    <div class="trow" data-reveal><span class="y">2012</span><span class="f">Highway</span><span class="m">Berlin international film festival</span><span class="a">Official selection</span><a class="rowlink" href="https://www.berlinale.de" target="_blank" rel="noopener" aria-label="Highway at the Berlin international film festival"></a></div>
     <p class="table-note" data-reveal>Reference works from Nepali cinema history. Sources: festival public records. Last verified: September 2026.</p>
   </section>
 
@@ -513,22 +610,31 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     </div>
     <div class="thead" aria-hidden="true"><span>Year</span><span>Film</span><span>Title</span><span>Publication</span></div>
     <h3 class="year-group" data-reveal>2026</h3>
-    <div class="trow" data-reveal><span class="y">2026</span><span class="f">Studio notes</span><span class="m">A quiet new wave from Kathmandu</span><span class="a">The Kathmandu Post</span></div>
-    <div class="trow" data-reveal><span class="y">2026</span><span class="f">Studio notes</span><span class="m">Craft over noise</span><span class="a">Nepali Times</span></div>
+    <div class="trow" data-reveal><span class="y">2026</span><span class="f">Studio notes</span><span class="m">A quiet new wave from Kathmandu</span><span class="a">The Kathmandu Post</span><a class="rowlink" href="https://kathmandupost.com" target="_blank" rel="noopener" aria-label="Studio notes at The Kathmandu Post"></a></div>
+    <div class="trow" data-reveal><span class="y">2026</span><span class="f">Studio notes</span><span class="m">Craft over noise</span><span class="a">Nepali Times</span><a class="rowlink" href="https://www.nepalitimes.com" target="_blank" rel="noopener" aria-label="Studio notes at Nepali Times"></a></div>
     <h3 class="year-group" data-reveal>2025</h3>
-    <div class="trow" data-reveal><span class="y">2025</span><span class="f">Selected work</span><span class="m">Festival diary</span><span class="a">Setopati</span></div>
-    <div class="trow" data-reveal><span class="y">2025</span><span class="f">Selected work</span><span class="m">Cinema of place</span><span class="a">Republica</span></div>
+    <div class="trow" data-reveal><span class="y">2025</span><span class="f">Selected work</span><span class="m">Festival diary</span><span class="a">Setopati</span><a class="rowlink" href="https://www.setopati.com" target="_blank" rel="noopener" aria-label="Festival diary at Setopati"></a></div>
+    <div class="trow" data-reveal><span class="y">2025</span><span class="f">Selected work</span><span class="m">Cinema of place</span><span class="a">Republica</span><a class="rowlink" href="https://myrepublica.nagariknetwork.com" target="_blank" rel="noopener" aria-label="Cinema of place at Republica"></a></div>
     <h3 class="year-group" data-reveal>2024</h3>
-    <div class="trow" data-reveal><span class="y">2024</span><span class="f">Selected work</span><span class="m">Notes on a premiere</span><span class="a">The Himalayan Times</span></div>
+    <div class="trow" data-reveal><span class="y">2024</span><span class="f">Selected work</span><span class="m">Notes on a premiere</span><span class="a">The Himalayan Times</span><a class="rowlink" href="https://thehimalayantimes.com" target="_blank" rel="noopener" aria-label="Notes on a premiere at The Himalayan Times"></a></div>
     <div class="trow" data-reveal><span class="y">2024</span><span class="f">Industry</span><span class="m">Details coming soon</span><span class="a">Information not publicly verified</span></div>
     <p class="table-note" data-reveal>Illustrative press index for the studio. Real festival records live in Awards, above.</p>
   </section>
 
   <!-- cta -->
   <section id="contact" aria-labelledby="contact-h">
-    <h2 id="contact-h" data-reveal>Talk to us about your film</h2>
+    <h2 id="contact-h" class="contact-statement" data-reveal>
+      <span class="line"><span>Let's make</span></span>
+      <span class="line"><span>something</span></span>
+      <span class="line"><span>worth watching.</span></span>
+    </h2>
     <p class="ne" lang="ne" data-reveal>आफ्नो फिल्मबारे कुरा गरौं</p>
-    <div data-reveal><a class="btn-ghost" href="mailto:hello@chalachitra.example">Contact us</a></div>
+    <div class="c-rows" data-reveal>
+      <div class="c-row"><span class="k">Email</span><a href="mailto:hello@chalachitra.example">hello@chalachitra.example</a></div>
+      <div class="c-row"><span class="k">Phone</span><a href="tel:+97714000000">+977 1 400 0000</a></div>
+      <div class="c-row"><span class="k">Social</span><span class="c-social"><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a><span class="sep">,</span> <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><span class="sep">,</span> <a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a></span></div>
+      <div class="c-row"><span class="k">Studio</span><span>Thamel, Kathmandu, Nepal</span></div>
+    </div>
     <div class="news" id="news" data-reveal>
       <label for="email">Subscribe to our newsletter</label>
       <form id="news-form" novalidate>
@@ -549,6 +655,33 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     <div class="fblock"><span class="k">C</span><div class="stack"><a href="mailto:hello@chalachitra.example">hello@chalachitra.example</a></div></div>
     <div class="fblock"><span class="k">S</span><div class="stack"><a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a><a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a><a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a></div></div>
   </div>
+  <details class="credits">
+    <summary>Photography credits — all location photographs, Wikimedia Commons</summary>
+    <p>
+      <a href="https://commons.wikimedia.org/wiki/File:Snowy_Annapurna_Range_-_panorama.jpg" target="_blank" rel="noopener">Snowy Annapurna panorama</a> — Ali Sabbagh · CC0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Kagbeni_Mustang-WLV-0775.jpg" target="_blank" rel="noopener">Kagbeni alley</a> — Bijay Chaurasia · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Kagbeni_Mustang-WLV-0741.jpg" target="_blank" rel="noopener">Kagbeni village</a> — Bijay Chaurasia · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Kagbeni_Mustang-WLV-0745.jpg" target="_blank" rel="noopener">Kag chode monastery</a> — Bijay Chaurasia · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Kagbeni_Mustang-WLV-0756.jpg" target="_blank" rel="noopener">Jhong Khola valley</a> — Bijay Chaurasia · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Panorama_from_poonhill-2019-BJ.jpg" target="_blank" rel="noopener">Poon Hill panorama</a> — Bijay Chaurasia · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Al_Madina_(Halal_Foods_Restaurant)Thamel,Kathmandu,Nepal.jpg" target="_blank" rel="noopener">Thamel at night</a> — Saddam Hussain Ansari · CC BY 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Thamel,_Kathmandu_07.jpg" target="_blank" rel="noopener">Thamel, Kathmandu</a> — Saddam Hussain Ansari · CC BY 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Kagbeni,_Paddies_2,_Mustang,_Nepal.jpg" target="_blank" rel="noopener">Kagbeni paddies</a> — Vyacheslav Argenberg · CC BY 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Boudha_Stupa_2018_04.jpg" target="_blank" rel="noopener">Boudha stupa</a> — Nabin K. Sapkota · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Annapurna_Conservation_Area_Mustang.jpg" target="_blank" rel="noopener">Annapurna conservation area</a> — Nabin K. Sapkota · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Bhaktapur_Durbar_Square_2018_13.jpg" target="_blank" rel="noopener">Bhaktapur durbar square</a> — Nabin K. Sapkota · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Lalitpur_Patan_Durbar_Square_2023_02.jpg" target="_blank" rel="noopener">Krishna mandir, Patan</a> — Chainwit. · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Nepal_Patan_Durbar_Square_10_(full_res).jpg" target="_blank" rel="noopener">Patan durbar square</a> — Alexander Shafir · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Boudhanath_Stupa_and_Butter_Lamp.jpg" target="_blank" rel="noopener">Boudhanath butter lamp</a> — Gaurav Dhwaj Khadka · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:1930%27s_35mm_film_projector..jpg" target="_blank" rel="noopener">1930s 35mm projector</a> — YellowFratello · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Nischal_Basnet_02.jpg" target="_blank" rel="noopener">Nischal Basnet, Chiso Ashtray premiere</a> — Nirmal Dulal · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Director_Deepak_Rauniyar_at_81st_Venice_International_Film_Festival_for_Pouja,_Sir.jpg" target="_blank" rel="noopener">Deepak Rauniyar, Venice 2024</a> — Ariela Ortiz-Barrantes · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Min_Bahadur_Bham_at_Berlinale_2026.jpg" target="_blank" rel="noopener">Min Bahadur Bham, Berlinale 2026</a> — Elena Ternovaja · CC BY-SA 3.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Bipin_Karki.png" target="_blank" rel="noopener">Bipin Karki</a> — Bipin Sapkota · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Dayahang_Rai_at_ITF_(cropped).jpg" target="_blank" rel="noopener">Dayahang Rai, ITF 2019</a> — Nirmal Dulal · CC BY-SA 4.0<br>
+      <a href="https://commons.wikimedia.org/wiki/File:Miruna_Magar_at_movie_screening.png" target="_blank" rel="noopener">Miruna Magar, screening</a> — public domain
+    </p>
+  </details>
   <div class="fbottom">
     <span>All rights reserved © Chalachitra 2026</span>
     <span>Made with light in Kathmandu, Nepal</span>
@@ -572,12 +705,19 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
   try { seen = sessionStorage.getItem('ch_loader_done'); } catch(e){}
 
   function revealContent(instant){
-    var heroes = document.querySelectorAll('[data-reveal-hero]');
+    var all = Array.prototype.slice.call(document.querySelectorAll('[data-reveal-hero]'));
+    var lines = all.filter(function(el){ return el.closest('.hero-statement'); });
+    var rest = all.filter(function(el){ return !el.closest('.hero-statement'); });
     if (reduced || instant === true && !window.gsap) {
       return;
     }
     if (!window.gsap) return;
-    gsap.fromTo(heroes, {y:40, opacity:0}, {y:0, opacity:1, duration:1, ease:'power3.out', stagger:0.08});
+    /* statement lines rise inside their overflow masks, settling out of blur; everything else fades up */
+    gsap.fromTo(lines, {yPercent:115, opacity:0, filter:'blur(6px)'}, {yPercent:0, opacity:1, filter:'blur(0px)', duration:1.1, ease:'cubic-bezier(0.22,1,0.36,1)', stagger:0.09});
+    gsap.fromTo(rest, {y:24, opacity:0}, {y:0, opacity:1, duration:0.9, ease:'cubic-bezier(0.22,1,0.36,1)', stagger:0.07, delay:0.15});
+    /* hero figure settles from a slight overscale on load */
+    var heroFig = document.querySelector('.hero-media figure');
+    if (heroFig) gsap.fromTo(heroFig, {scale:1.06}, {scale:1, duration:1.4, ease:'cubic-bezier(0.22,1,0.36,1)', delay:0.3});
   }
 
   function hideLoader(instant){
@@ -704,7 +844,136 @@ footer{border-top:1px solid var(--line);padding:72px var(--pad-d) 28px}
     var heroImg = document.querySelector('.hero-media img');
     if (heroImg) gsap.fromTo(heroImg, {scale:1.15, yPercent:-4}, {scale:1.15, yPercent:4, ease:'none',
       scrollTrigger:{trigger:'.hero-media', start:'top bottom', end:'bottom top', scrub:true}});
+    /* clip-path image reveals: inset(8%) to 0, one hero motion per image */
+    gsap.utils.toArray('.film-media, .pillar figure, .portrait .ph').forEach(function(media){
+      gsap.fromTo(media, {clipPath:'inset(8% 8% 8% 8%)'}, {clipPath:'inset(0% 0% 0% 0%)', duration:1.2, ease:'power3.out',
+        scrollTrigger:{trigger:media, start:'top 85%', once:true}});
+    });
   }
+
+  /* verified portraits: file pages confirm the subject's identity; placeholders keep neutral stills */
+  var TEAM_PORTRAITS = {
+    'Nischal Basnet': 'https://commons.wikimedia.org/wiki/Special:FilePath/Nischal_Basnet_02.jpg?width=600',
+    'Deepak Rauniyar': 'https://commons.wikimedia.org/wiki/Special:FilePath/Director_Deepak_Rauniyar_at_81st_Venice_International_Film_Festival_for_Pouja,_Sir.jpg?width=600',
+    'Min Bahadur Bham': 'https://commons.wikimedia.org/wiki/Special:FilePath/Min_Bahadur_Bham_at_Berlinale_2026.jpg?width=600',
+    'Bipin Karki': 'https://commons.wikimedia.org/wiki/Special:FilePath/Bipin_Karki.png?width=600',
+    'Dayahang Rai': 'https://commons.wikimedia.org/wiki/Special:FilePath/Dayahang_Rai_at_ITF_(cropped).jpg?width=600',
+    'Miruna Magar': 'https://commons.wikimedia.org/wiki/Special:FilePath/Miruna_Magar_at_movie_screening.png?width=600'
+  };
+  var TEAM_STILLS = [
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Boudha_Stupa_2018_04.jpg?width=600',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Bhaktapur_Durbar_Square_2018_13.jpg?width=600',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Lalitpur_Patan_Durbar_Square_2023_02.jpg?width=600',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Nepal_Patan_Durbar_Square_10_(full_res).jpg?width=600',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Boudhanath_Stupa_and_Butter_Lamp.jpg?width=600',
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Thamel,_Kathmandu_07.jpg?width=600'
+  ];
+  function teamPhotoFor(name, i){
+    return TEAM_PORTRAITS[name] || TEAM_STILLS[i % TEAM_STILLS.length];
+  }
+  function assignTeamPhotos(){
+    Array.prototype.forEach.call(document.querySelectorAll('.person'), function(p, i){
+      var n = p.querySelector('.name');
+      p.setAttribute('data-img', teamPhotoFor(n ? n.textContent.trim() : '', i));
+    });
+  }
+
+  /* custom cursor + cursor-following previews: fine pointers only, no reduced motion */
+  (function(){
+    var fine = window.matchMedia('(pointer: fine)').matches;
+    if (!fine || reduced) return;
+    var cursor = document.getElementById('cursor');
+    var cursorLabel = document.getElementById('cursor-label');
+    var filmPrev = document.getElementById('film-preview');
+    var teamPrev = document.getElementById('team-preview');
+    if (!cursor || !filmPrev || !teamPrev) return;
+    document.documentElement.classList.add('has-cursor');
+    assignTeamPhotos();
+    Array.prototype.forEach.call(document.querySelectorAll('.frow'), function(r){
+      var im = new Image(); im.src = r.getAttribute('data-img');
+    });
+    TEAM_STILLS.forEach(function(src){ var im = new Image(); im.src = src; });
+    Object.keys(TEAM_PORTRAITS).forEach(function(k){ var im = new Image(); im.src = TEAM_PORTRAITS[k]; });
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    var cx = mx, cy = my, px = mx, py = my, sF = 0.96, sT = 0.96;
+    var filmOn = false, teamOn = false;
+    document.addEventListener('mousemove', function(e){ mx = e.clientX; my = e.clientY; }, {passive:true});
+    function place(el, s){
+      var pw = Math.min(300, window.innerWidth * 0.26), ph = pw * 0.75;
+      var fx = px + 28;
+      if (fx + pw > window.innerWidth - 16) fx = px - 28 - pw;
+      var fy = py - ph / 2;
+      fy = Math.max(16, Math.min(window.innerHeight - ph - 16, fy));
+      el.style.transform = 'translate(' + fx + 'px,' + fy + 'px) scale(' + s + ')';
+    }
+    function fade(el, on){
+      if (window.gsap) gsap.to(el, {autoAlpha:on ? 1 : 0, duration:on ? 0.45 : 0.35, ease:'power3.out', overwrite:'auto'});
+      else { el.style.opacity = on ? 1 : 0; el.style.visibility = on ? 'visible' : 'hidden'; }
+    }
+    document.addEventListener('mouseover', function(e){
+      if (!e.target.closest) return;
+      var frow = e.target.closest('.frow');
+      var person = e.target.closest('.person');
+      var view = e.target.closest('.film-media a, a.view-link');
+      var ext = e.target.closest('a[target="_blank"]');
+      var fsrc = (frow && window.innerWidth > 768) ? frow.getAttribute('data-img') : null;
+      if (fsrc) {
+        if (filmPrev.getAttribute('data-showing') !== fsrc) {
+          filmPrev.setAttribute('data-showing', fsrc);
+          filmPrev.querySelector('img').setAttribute('src', fsrc);
+        }
+        if (!filmOn) { filmOn = true; fade(filmPrev, true); }
+      } else if (filmOn) {
+        filmOn = false; filmPrev.removeAttribute('data-showing'); fade(filmPrev, false);
+      }
+      var tsrc = (person && window.innerWidth > 768) ? person.getAttribute('data-img') : null;
+      if (tsrc) {
+        if (teamPrev.getAttribute('data-showing') !== tsrc) {
+          teamPrev.setAttribute('data-showing', tsrc);
+          teamPrev.querySelector('img').setAttribute('src', tsrc);
+        }
+        if (!teamOn) { teamOn = true; fade(teamPrev, true); }
+      } else if (teamOn) {
+        teamOn = false; teamPrev.removeAttribute('data-showing'); fade(teamPrev, false);
+      }
+      var txt = '';
+      if (view) txt = 'View film';
+      else if (ext) txt = 'Open';
+      if (txt) { cursorLabel.textContent = txt; cursor.classList.add('big'); }
+      else cursor.classList.remove('big');
+    });
+    (function follow(){
+      cx += (mx - cx) * 0.2;
+      cy += (my - cy) * 0.2;
+      px += (mx - px) * 0.1;
+      py += (my - py) * 0.1;
+      sF += ((filmOn ? 1 : 0.96) - sF) * 0.15;
+      sT += ((teamOn ? 1 : 0.96) - sT) * 0.15;
+      cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+      if (filmOn || sF < 0.999) place(filmPrev, sF);
+      if (teamOn || sT < 0.999) place(teamPrev, sT);
+      requestAnimationFrame(follow);
+    })();
+  })();
+
+  /* touch fallback: tap a team name to peek the on-set still */
+  (function(){
+    var coarse = window.matchMedia('(pointer: coarse)').matches;
+    if (!coarse || reduced) return;
+    var teamPrev = document.getElementById('team-preview');
+    if (!teamPrev) return;
+    assignTeamPhotos();
+    var open = null;
+    document.addEventListener('click', function(e){
+      var person = (e.target.closest) ? e.target.closest('.person') : null;
+      if (open && person !== open) { open = null; teamPrev.classList.remove('peek'); }
+      if (!person) return;
+      if (open === person) { open = null; teamPrev.classList.remove('peek'); return; }
+      open = person;
+      teamPrev.querySelector('img').setAttribute('src', person.getAttribute('data-img'));
+      teamPrev.classList.add('peek');
+    });
+  })();
 
   /* newsletter */
   var form = document.getElementById('news-form');
