@@ -326,8 +326,8 @@
         scrollTrigger:{trigger:el, start:'top 85%', once:true}});
     });
 
-    /* Parallax on hero image */
-    var heroImg = document.querySelector('.hero-media img');
+    /* Parallax on hero video */
+    var heroImg = document.querySelector('.hero-media video, .hero-media img');
     if (heroImg && !heroImg._chParallaxDone) {
       heroImg._chParallaxDone = true;
       gsap.fromTo(heroImg, {scale:1.08, yPercent:-3}, {scale:1.08, yPercent:3, ease:'none',
@@ -437,67 +437,29 @@
     if (ok) { news.classList.remove('invalid'); news.classList.add('done'); }
   });
 
-  /* Hero background — YouTube iframe embed (8efveLZ3E24) */
+  /* Hero background — Pixabay video (Nepal Himalayas Trekking Snow 258656) */
   (function(){
-    var container = document.getElementById('yt-player');
-    if (!container) return;
-    if (reduced) return;
+    var video = document.getElementById('hero-video');
+    if (!video) return;
+    if (reduced) { video.pause(); return; }
 
-    var VIDEO_ID = '8efveLZ3E24';
-    var player = null;
-
-    function onYTReady(){
-      if (typeof YT === 'undefined' || !YT.Player) return;
-      player = new YT.Player('yt-player', {
-        videoId: VIDEO_ID,
-        playerVars: {
-          autoplay: 1,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          iv_load_policy: 3,
-          modestbranding: 1,
-          playsinline: 1,
-          rel: 0,
-          showinfo: 0,
-          origin: window.location.origin,
-          mute: 1,
-          loop: 1,
-          playlist: VIDEO_ID
-        },
-        events: {
-          onReady: function(e){
-            try { e.target.mute(); } catch(err){}
-            try { e.target.playVideo(); } catch(err){}
-            try { e.target.setPlaybackQuality('highres'); } catch(err){}
-          },
-          onStateChange: function(e){
-            if (e.data === YT.PlayerState.ENDED) {
-              try { e.target.playVideo(); } catch(err){}
-            }
-          }
-        }
-      });
+    function tryPlay(){
+      var p = video.play();
+      if (p && p.catch) p.catch(function(){});
     }
 
-    if (typeof YT !== 'undefined' && YT.Player) {
-      onYTReady();
-    } else {
-      window.onYouTubeIframeAPIReady = onYTReady;
+    if (video.readyState >= 2) tryPlay();
+    else video.addEventListener('canplay', tryPlay, {once:true});
+
+    /* Pause offscreen to save bandwidth */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) tryPlay();
+          else video.pause();
+        });
+      }, {threshold: 0.05}).observe(video);
     }
-
-    /* Retry quality setting after load */
-    setTimeout(function(){
-      if (player && player.setPlaybackQuality) {
-        try { player.setPlaybackQuality('highres'); } catch(e){}
-      }
-    }, 3000);
-
-    setTimeout(function(){
-      if (player && player.setPlaybackQuality) {
-        try { player.setPlaybackQuality('highres'); } catch(e){}
-      }
-    }, 8000);
   })();
 
   /* Back to top */
